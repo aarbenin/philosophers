@@ -1,32 +1,6 @@
 
 #include "philo.h"
 
-// sim_control.c
-bool	is_simulation_over(t_simulation *sim)
-{
-	pthread_mutex_lock(&sim->sim_end_mutex);
-	if (sim->is_sim_over)
-	{
-		pthread_mutex_unlock(&sim->sim_end_mutex);
-		return (true);
-	}
-	pthread_mutex_unlock(&sim->sim_end_mutex);
-	return (false);
-}
-
-void	end_simulation(t_simulation *sim)
-{
-	pthread_mutex_lock(&sim->sim_end_mutex);
-	if (!sim->is_sim_over)
-	{
-		sim->is_sim_over = true;
-		pthread_mutex_unlock(&sim->sim_end_mutex);
-		return ;
-	}
-	pthread_mutex_unlock(&sim->sim_end_mutex);
-}
-
-// philo_state.c
 void	log_philo_action(t_philosopher *philo, const char *action)
 {
 	u_int64_t	action_time;

@@ -1,39 +1,6 @@
 
 #include "philo.h"
 
-// philo_actions.c
-static void	take_forks(t_philosopher *philo)
-{
-	if (philo->id % 2 != 0)
-	{
-		pthread_mutex_lock(philo->l_fork);
-		log_philo_action(philo, "has taken a fork");
-		pthread_mutex_lock(philo->r_fork);
-		log_philo_action(philo, "has taken a fork");
-	}
-	else
-	{
-		pthread_mutex_lock(philo->r_fork);
-		log_philo_action(philo, "has taken a fork");
-		pthread_mutex_lock(philo->l_fork);
-		log_philo_action(philo, "has taken a fork");
-	}
-}
-
-static void	release_forks(t_philosopher *philo)
-{
-	if (philo->id % 2 != 0)
-	{
-		pthread_mutex_unlock(philo->l_fork);
-		pthread_mutex_unlock(philo->r_fork);
-	}
-	else
-	{
-		pthread_mutex_unlock(philo->r_fork);
-		pthread_mutex_unlock(philo->l_fork);
-	}
-}
-
 static void	philo_eat(t_philosopher *philo)
 {
 	take_forks(philo);
@@ -68,7 +35,7 @@ static void	philo_think(t_philosopher *philo)
 		sleep_ms(think_time);
 	}
 }
-// philo_routine.c
+
 static void	*single_philosopher(t_philosopher *philo)
 {
 	while (!is_simulation_over(philo->sim_data))
