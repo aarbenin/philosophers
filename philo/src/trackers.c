@@ -1,8 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   trackers.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aarbenin <aarbenin@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/08/11 19:39:38 by aarbenin          #+#    #+#             */
+/*   Updated: 2024/08/11 19:39:44 by aarbenin         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo.h"
 
-static u_int64_t	last_meal_time(t_philosopher *philo)
+static unsigned long long	last_meal_time(t_philosopher *philo)
 {
-	u_int64_t	time;
+	unsigned long long	time;
 
 	pthread_mutex_lock(&philo->last_meal_mutex);
 	time = philo->last_meal;
@@ -12,15 +24,17 @@ static u_int64_t	last_meal_time(t_philosopher *philo)
 
 static bool	check_philo_death(t_philosopher *philo, t_simulation *sim)
 {
-	u_int64_t	time_since_last_meal;
-	u_int64_t	time_to_die;
+	unsigned long long	time_since_last_meal;
+	unsigned long long	time_to_die;
 
 	time_since_last_meal = get_time(last_meal_time(philo));
-	time_to_die = (u_int64_t)sim->time_to_die;
+	time_to_die = (unsigned long long)sim->time_to_die;
 	if (time_since_last_meal > time_to_die)
 	{
-		log_philo_action(philo, "died");
+		pthread_mutex_lock(&sim->log_mutex);
+		printf("%llu %d died\n", get_time(sim->start_time), philo->id);
 		end_simulation(sim);
+		pthread_mutex_unlock(&sim->log_mutex);
 		return (true);
 	}
 	return (false);
@@ -43,7 +57,7 @@ void	*death_tracker(void *arg)
 				return (NULL);
 			i++;
 		}
-		usleep(1000);
+		usleep(100);
 	}
 	return (NULL);
 }
@@ -66,14 +80,17 @@ static bool	all_goals_met(t_simulation *sim)
 
 void	*eat_goal_tracker(void *arg)
 {
-	t_simulation *sim;
+	t_simulation	*sim;
 
 	sim = (t_simulation *)arg;
 	while (!is_simulation_over(sim))
 	{
 		if (all_goals_met(sim))
-			return (end_simulation(sim), NULL);
-		usleep(1000);
+		{
+			end_simulation(sim);
+			return (NULL);
+		}
+		usleep(100);
 	}
 	return (NULL);
 }

@@ -1,10 +1,25 @@
-#include "libraries.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   structs.h                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aarbenin <aarbenin@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/08/11 19:34:49 by aarbenin          #+#    #+#             */
+/*   Updated: 2024/08/11 19:34:59 by aarbenin         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#ifndef STRUCTS_H
+# define STRUCTS_H
+
+# include "libraries.h"
 
 typedef struct s_philosopher
 {
 	int						id;
 	int						meals_eaten;
-	u_int64_t				last_meal;
+	unsigned long long		last_meal;
 	pthread_mutex_t			meals_eaten_mutex;
 	pthread_mutex_t			last_meal_mutex;
 	pthread_mutex_t			*r_fork;
@@ -15,7 +30,7 @@ typedef struct s_philosopher
 typedef struct s_simulation
 {
 	struct s_philosopher	*philosophers;
-	u_int64_t				start_time;
+	unsigned long long		start_time;
 	int						num_philo;
 	int						time_to_die;
 	int						time_to_eat;
@@ -54,3 +69,5 @@ enum						e_philosopher_state
 	MEAL_COUNT_UPDATE,
 	LAST_MEAL
 };
+
+#endif

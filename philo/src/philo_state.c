@@ -1,17 +1,28 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   philo_state.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aarbenin <aarbenin@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/08/11 19:38:33 by aarbenin          #+#    #+#             */
+/*   Updated: 2024/08/11 19:38:38 by aarbenin         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "philo.h"
 
 void	log_philo_action(t_philosopher *philo, const char *action)
 {
-	u_int64_t	action_time;
+	unsigned long long	action_time;
 
-	action_time = get_time(philo->sim_data->start_time);
+	pthread_mutex_lock(&philo->sim_data->log_mutex);
 	if (!is_simulation_over(philo->sim_data))
 	{
-		pthread_mutex_lock(&philo->sim_data->log_mutex);
+		action_time = get_time(philo->sim_data->start_time);
 		printf("%llu %d %s\n", action_time, philo->id, action);
-		pthread_mutex_unlock(&philo->sim_data->log_mutex);
 	}
+	pthread_mutex_unlock(&philo->sim_data->log_mutex);
 }
 
 bool	update_last_meal_time(t_philosopher *philo)

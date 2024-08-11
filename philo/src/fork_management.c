@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   fork_management.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aarbenin <aarbenin@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/08/11 19:36:40 by aarbenin          #+#    #+#             */
+/*   Updated: 2024/08/11 19:36:46 by aarbenin         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo.h"
 
 void	take_forks(t_philosopher *philo)
@@ -6,6 +18,7 @@ void	take_forks(t_philosopher *philo)
 	{
 		pthread_mutex_lock(philo->l_fork);
 		log_philo_action(philo, "has taken a fork");
+		usleep(10);
 		pthread_mutex_lock(philo->r_fork);
 		log_philo_action(philo, "has taken a fork");
 	}
@@ -13,6 +26,7 @@ void	take_forks(t_philosopher *philo)
 	{
 		pthread_mutex_lock(philo->r_fork);
 		log_philo_action(philo, "has taken a fork");
+		usleep(10);
 		pthread_mutex_lock(philo->l_fork);
 		log_philo_action(philo, "has taken a fork");
 	}
